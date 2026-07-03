@@ -1,1 +1,134 @@
-<h1>問ノ森</h1>
+ <!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>問ノ森 住人番号案内 v3</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#f6f1e6;color:#4a3a2a}
+.wrap{max-width:520px;margin:auto;padding:28px 18px 48px}
+.card{background:#fffaf0;border:2px solid #d9c8a8;border-radius:28px;padding:24px 18px;text-align:center;box-shadow:0 10px 24px #0001}
+h1{font-size:28px;line-height:1.35;margin:0 0 12px}
+p{line-height:1.8}
+input{width:100%;box-sizing:border-box;padding:14px;margin:10px 0;border:1px solid #c8b894;border-radius:16px;font-size:18px;background:#fffdf8}
+button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;color:white;font-size:18px;font-weight:800}
+.result{display:none;margin-top:20px;padding:20px;background:#eef7e8;border-radius:22px}
+.no{font-size:56px;font-weight:900;color:#5b7d47;line-height:1}
+.eto{font-size:24px;font-weight:800;margin-top:8px}
+.name{font-size:22px;font-weight:800;margin-top:4px}
+.note{font-size:13px;text-align:left;color:#7d6a55;border-top:1px dashed #c8b894;margin-top:18px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="card">
+<h1>🌳問ノ森<br>住人番号案内</h1>
+<p>生年月日から<br>あなたの住人を探します。</p>
+
+<input type="date" id="birth">
+<button onclick="searchResident()">住人を探す 🌱</button>
+
+<div id="result" class="result">
+<div>あなたの住人は…</div>
+<div id="no" class="no"></div>
+<div id="eto" class="eto"></div>
+<div id="name" class="name"></div>
+</div>
+
+<div class="note">
+※これは生年月日だけで出す簡易版です。<br>
+本格的な四柱推命では、生まれた時刻・節入り・流派・命式全体などもあわせて見ます。
+</div>
+</div>
+</div>
+
+<script>
+const residents=[
+["01","甲子","お母さんネズミ"],
+["02","乙丑","花壇好きの牛"],
+["03","丙寅","情熱の寅"],
+["04","丁卯","菩薩うさぎ"],
+["05","戊辰","山の龍"],
+["06","己巳","畑守りの蛇"],
+["07","庚午","開拓の馬車"],
+["08","辛未","伝統工芸の羊"],
+["09","壬申","離島を泳ぐ猿"],
+["10","癸酉","雨告げの鳥"],
+["11","甲戌","保育士の犬"],
+["12","乙亥","農家の猪"],
+["13","丙子","人気者のネズミ"],
+["14","丁丑","縁の下の牛"],
+["15","戊寅","陣で策を練る寅"],
+["16","己卯","農園のうさぎ"],
+["17","庚辰","開拓の龍"],
+["18","辛巳","研究者の蛇"],
+["19","壬午","モンゴルの馬"],
+["20","癸未","相棒のぬいぐるみの羊"],
+["21","甲申","樹木医の猿"],
+["22","乙酉","自然界の鳥"],
+["23","丙戌","お手本のモデル犬"],
+["24","丁亥","天才研究者の猪"],
+["25","戊子","俵のネズミ"],
+["26","己丑","働き牛"],
+["27","庚寅","開拓者の寅"],
+["28","辛卯","宝石のうさぎ"],
+["29","壬辰","時代をつくる龍"],
+["30","癸巳","名誉教授の蛇"],
+["31","甲午","野生の馬"],
+["32","乙未","牧場の主の羊"],
+["33","丙申","サーカスの猿"],
+["34","丁酉","夜間工事の鳥"],
+["35","戊戌","山の犬神"],
+["36","己亥","信念の耕作人の猪"],
+["37","庚子","起業家のネズミ"],
+["38","辛丑","宝石研磨職人の牛"],
+["39","壬寅","企画・広報の寅"],
+["40","癸卯","豊作祈祷師のうさぎ"],
+["41","甲辰","天空の昇り龍"],
+["42","乙巳","漢方医の蛇"],
+["43","丙午","インフルエンサーの馬"],
+["44","丁未","熟練メンターの羊"],
+["45","戊申","お山の大将の猿"],
+["46","己酉","大地を散歩する鳥"],
+["47","庚戌","ボディーガードの番犬"],
+["48","辛亥","研鑽するクリエイターの猪"],
+["49","壬子","ジャーナリストのネズミ"],
+["50","癸丑","花屋を営む牛"],
+["51","甲寅","ITエンジニアの寅"],
+["52","乙卯","メルヘン丘のうさぎ"],
+["53","丙辰","神の使い朱龍"],
+["54","丁巳","ベテラン哲学者の蛇"],
+["55","戊午","登山バスの馬"],
+["56","己未","老舗農園の羊"],
+["57","庚申","剣舞の猿"],
+["58","辛酉","ネイリストの鳥"],
+["59","壬戌","海上保安官の犬"],
+["60","癸亥","癒しの作家の猪"]
+];
+
+function julianDayNumber(y,m,d){
+const a=Math.floor((14-m)/12);
+const yy=y+4800-a;
+const mm=m+12*a-3;
+return d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+}
+
+function index60(y,m,d){
+const jdn=julianDayNumber(y,m,d);
+/* 1977-02-19 が 44 丁未になるよう調整 */
+return ((jdn+50)%60+60)%60;
+}
+
+function searchResident(){
+const v=document.getElementById("birth").value;
+if(!v){alert("生年月日を入れてね🌱");return;}
+const [y,m,d]=v.split("-").map(Number);
+const r=residents[index60(y,m,d)];
+document.getElementById("no").textContent=r[0];
+document.getElementById("eto").textContent=r[1];
+document.getElementById("name").textContent=r[2];
+document.getElementById("result").style.display="block";
+}
+</script>
+</body>
+</html>
