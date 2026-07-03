@@ -116,7 +116,7 @@ return d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Mat
 function index60(y,m,d){
 const jdn=julianDayNumber(y,m,d);
 /* 1977-02-19 が 44 丁未になるよう調整 */
-return ((jdn+48)%60+60)%60;
+return ((jdn+49)%60+60)%60;
 }
 
 function searchResident(){
