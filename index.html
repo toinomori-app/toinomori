@@ -20,17 +20,20 @@ label{display:block;margin:8px 0;font-size:16px}
 .radio-row{display:flex;gap:18px;margin-top:8px}
 .note-small{font-size:12px;line-height:1.7;color:#7d6a55;margin-top:8px}
 button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;color:white;font-size:18px;font-weight:800;margin-top:12px}
-.result{display:none;margin-top:20px;padding:20px;background:#eef7e8;border-radius:22px;text-align:center}
-.no{font-size:56px;font-weight:900;color:#5b7d47;line-height:1}
-.eto{font-size:24px;font-weight:800;margin-top:8px}
-.name{font-size:22px;font-weight:800;margin-top:4px}
+.result{display:none;margin-top:20px;padding:22px;background:#eef7e8;border-radius:22px;text-align:center}
+.result-title{font-size:20px;font-weight:800;line-height:1.8;color:#4f7042}
+.no{font-size:44px;font-weight:900;color:#5b7d47;line-height:1.3;margin-top:8px}
+.name{font-size:24px;font-weight:900;margin-top:8px;line-height:1.5}
+.message{margin-top:8px;line-height:1.9;font-size:18px}
 .card-img{width:100%;max-width:420px;border-radius:22px;margin-top:18px;box-shadow:0 8px 18px #0002}
 .note{font-size:13px;text-align:left;color:#7d6a55;border-top:1px dashed #c8b894;margin-top:18px;padding-top:12px}
 </style>
 </head>
+
 <body>
 <div class="wrap">
 <div class="card">
+
 <h1>🌳問ノ森<br>あなたの住人を探そう</h1>
 <p>生年月日から<br>あなたの住人を探します。</p>
 
@@ -73,17 +76,18 @@ button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;c
 <button onclick="searchResident()">🌳 森へ入る</button>
 
 <div id="result" class="result">
-<div>あなたの住人は…</div>
-<div id="no" class="no"></div>
-<div id="eto" class="eto"></div>
-<div id="name" class="name"></div>
-<img id="cardImage" class="card-img" alt="住人カード">
+  <div id="resultTitle" class="result-title"></div>
+  <div id="no" class="no"></div>
+  <div id="name" class="name"></div>
+  <div id="message" class="message"></div>
+  <img id="cardImage" class="card-img" alt="住人カード">
 </div>
 
 <div class="note">
 ※これは生年月日だけで出す簡易版です。<br>
-本格的な四柱推命では、生まれた時刻・節入り・流派・命式全体などもあわせて見ます。
+本格的な読み解きでは、生まれた時刻や全体の流れもあわせて見ていきます。
 </div>
+
 </div>
 </div>
 
@@ -167,28 +171,35 @@ function updateDays(){
   const dSelect=document.getElementById("day");
   const current=Number(dSelect.value)||1;
   const max=new Date(y,m,0).getDate();
+
   dSelect.innerHTML="";
+
   for(let d=1;d<=max;d++){
     const o=document.createElement("option");
     o.value=d;
     o.textContent=d+"日";
     dSelect.appendChild(o);
   }
+
   dSelect.value=Math.min(current,max);
 }
 
 function setup(){
   const now=new Date().getFullYear();
+
   fillSelect("year",1900,now,"年");
   fillSelect("month",1,12,"月");
   fillSelect("hour",0,23,"時");
   fillSelect("minute",0,59,"分");
+
   document.getElementById("year").value=1977;
   document.getElementById("month").value=2;
   updateDays();
   document.getElementById("day").value=19;
+
   document.getElementById("hour").value=0;
   document.getElementById("minute").value=0;
+
   document.getElementById("year").addEventListener("change",updateDays);
   document.getElementById("month").addEventListener("change",updateDays);
 }
@@ -198,7 +209,14 @@ function julianDayNumber(y,m,d){
   const a=Math.floor((14-m)/12);
   const yy=y+4800-a;
   const mm=m+12*a-3;
-  return d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+
+  return d
+    + Math.floor((153*mm+2)/5)
+    + 365*yy
+    + Math.floor(yy/4)
+    - Math.floor(yy/100)
+    + Math.floor(yy/400)
+    - 32045;
 }
 
 function index60(y,m,d){
@@ -206,18 +224,42 @@ function index60(y,m,d){
   return ((jdn+49)%60+60)%60;
 }
 
+function getDisplayName(){
+  const last=document.getElementById("lastName").value.trim();
+  const first=document.getElementById("firstName").value.trim();
+
+  if(first) return first;
+  if(last) return last;
+  return "";
+}
+
 function searchResident(){
   const y=Number(document.getElementById("year").value);
   const m=Number(document.getElementById("month").value);
   const d=Number(document.getElementById("day").value);
-  if(!y||!m||!d){alert("生年月日を入れてね🌱");return;}
+
+  if(!y||!m||!d){
+    alert("生年月日を入れてね🌱");
+    return;
+  }
 
   const r=residents[index60(y,m,d)];
   const imageFile=r[0]+".png";
+  const displayName=getDisplayName();
 
-  document.getElementById("no").textContent=r[0];
-  document.getElementById("eto").textContent=r[1];
-  document.getElementById("name").textContent=r[2];
+  if(displayName){
+    document.getElementById("resultTitle").textContent =
+      "🌳" + displayName + "さんの森には…";
+  }else{
+    document.getElementById("resultTitle").textContent =
+      "🌳あなたの森には…";
+  }
+
+  document.getElementById("no").textContent = r[0] + "番";
+  document.getElementById("name").textContent = r[2];
+
+  document.getElementById("message").innerHTML =
+    "が住んでいるようです🏠<br><br>少し覗いてみましょう🌳✨";
 
   const img=document.getElementById("cardImage");
   img.src="./images/"+imageFile;
