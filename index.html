@@ -24,6 +24,7 @@ button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;c
 .no{font-size:56px;font-weight:900;color:#5b7d47;line-height:1}
 .eto{font-size:24px;font-weight:800;margin-top:8px}
 .name{font-size:22px;font-weight:800;margin-top:4px}
+.card-img{width:100%;max-width:420px;border-radius:22px;margin-top:18px;box-shadow:0 8px 18px #0002}
 .note{font-size:13px;text-align:left;color:#7d6a55;border-top:1px dashed #c8b894;margin-top:18px;padding-top:12px}
 </style>
 </head>
@@ -76,6 +77,7 @@ button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;c
 <div id="no" class="no"></div>
 <div id="eto" class="eto"></div>
 <div id="name" class="name"></div>
+<img id="cardImage" class="card-img" alt="住人カード">
 </div>
 
 <div class="note">
@@ -87,55 +89,55 @@ button{width:100%;padding:14px;border:0;border-radius:999px;background:#6f8e5d;c
 
 <script>
 const residents=[
-["01","甲子","お母さんネズミ"],
+["01","甲子","お母さんねずみ"],
 ["02","乙丑","花守りの牛"],
 ["03","丙寅","カリスマ監督の寅"],
 ["04","丁卯","菩薩うさぎ"],
 ["05","戊辰","山の龍"],
-["06","己巳","知恵育ての蛇"],
+["06","己巳","研究者の蛇"],
 ["07","庚午","開拓の馬車"],
 ["08","辛未","伝統工芸の羊"],
 ["09","壬申","離島を泳ぐ猿"],
 ["10","癸酉","雨告げの鳥"],
 ["11","甲戌","森の村役人の犬"],
 ["12","乙亥","農家の猪"],
-["13","丙子","人気者のネズミ"],
+["13","丙子","人気者のねずみ"],
 ["14","丁丑","廃材アート作家の牛"],
 ["15","戊寅","戦略アナリストの寅"],
 ["16","己卯","カフェ店長のうさぎ"],
 ["17","庚辰","開拓の龍"],
 ["18","辛巳","スタイリストの蛇"],
 ["19","壬午","モンゴルの馬"],
-["20","癸未","相棒のぬいぐるみの羊"],
+["20","癸未","相棒のぬいぐるみ羊"],
 ["21","甲申","樹木医の猿"],
 ["22","乙酉","自然界の鳥"],
 ["23","丙戌","保育士の犬"],
 ["24","丁亥","森のカウンセラーの猪"],
-["25","戊子","俵のネズミ"],
+["25","戊子","俵のねずみ"],
 ["26","己丑","縁の下の働き牛"],
 ["27","庚寅","開拓者の寅"],
 ["28","辛卯","宝石店主のうさぎ"],
 ["29","壬辰","時代をつくる龍"],
 ["30","癸巳","個性派劇団員の蛇"],
 ["31","甲午","牧場の馬"],
-["32","乙未","牧場の主の羊"],
+["32","乙未","牧場主の羊"],
 ["33","丙申","サーカスの猿"],
 ["34","丁酉","ランタン職人の鳥"],
 ["35","戊戌","山守の犬"],
 ["36","己亥","信念の耕作人の猪"],
-["37","庚子","起業家のネズミ"],
+["37","庚子","起業家のねずみ"],
 ["38","辛丑","宝石研磨職人の牛"],
 ["39","壬寅","企画・広報の寅"],
 ["40","癸卯","豊作祈祷師のうさぎ"],
 ["41","甲辰","天空の昇り龍"],
 ["42","乙巳","ハーブ園の蛇"],
 ["43","丙午","発信者の馬"],
-["44","丁未","熟練メンターの羊"],
-["45","戊申","山の隊長の猿"],
+["44","丁未","絵本作家の羊"],
+["45","戊申","お山の大将の猿"],
 ["46","己酉","実りを運ぶ鳥"],
-["47","庚戌","鍛冶番の犬"],
+["47","庚戌","鍛治番の犬"],
 ["48","辛亥","研鑽クリエイターの猪"],
-["49","壬子","ジャーナリストのネズミ"],
+["49","壬子","ジャーナリストのねずみ"],
 ["50","癸丑","ブーケ職人の牛"],
 ["51","甲寅","チアリーダーの寅"],
 ["52","乙卯","メルヘン丘のうさぎ"],
@@ -193,27 +195,35 @@ function setup(){
 setup();
 
 function julianDayNumber(y,m,d){
-const a=Math.floor((14-m)/12);
-const yy=y+4800-a;
-const mm=m+12*a-3;
-return d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+  const a=Math.floor((14-m)/12);
+  const yy=y+4800-a;
+  const mm=m+12*a-3;
+  return d+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
 }
 
 function index60(y,m,d){
-const jdn=julianDayNumber(y,m,d);
-return ((jdn+49)%60+60)%60;
+  const jdn=julianDayNumber(y,m,d);
+  return ((jdn+49)%60+60)%60;
 }
 
 function searchResident(){
-const y=Number(document.getElementById("year").value);
-const m=Number(document.getElementById("month").value);
-const d=Number(document.getElementById("day").value);
-if(!y||!m||!d){alert("生年月日を入れてね🌱");return;}
-const r=residents[index60(y,m,d)];
-document.getElementById("no").textContent=r[0];
-document.getElementById("eto").textContent=r[1];
-document.getElementById("name").textContent=r[2];
-document.getElementById("result").style.display="block";
+  const y=Number(document.getElementById("year").value);
+  const m=Number(document.getElementById("month").value);
+  const d=Number(document.getElementById("day").value);
+  if(!y||!m||!d){alert("生年月日を入れてね🌱");return;}
+
+  const r=residents[index60(y,m,d)];
+  const imageFile=r[0]+".png";
+
+  document.getElementById("no").textContent=r[0];
+  document.getElementById("eto").textContent=r[1];
+  document.getElementById("name").textContent=r[2];
+
+  const img=document.getElementById("cardImage");
+  img.src="images/"+imageFile;
+  img.alt=r[0]+" "+r[2];
+
+  document.getElementById("result").style.display="block";
 }
 </script>
 </body>
