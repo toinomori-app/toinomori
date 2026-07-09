@@ -51,3 +51,7 @@ const meguriMap = {
     subtitle: "好奇心と新しい発見"
   }
 };
+
+const residentMeguriMap = {
+  "44": "り"
+};
