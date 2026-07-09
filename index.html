@@ -89,7 +89,10 @@ button{width:100%;padding:14px;border:0;border-radius:999px;background:var(--gre
 <div id="no" class="no"></div>
 <div id="name" class="name"></div>
 <div id="message" class="message"></div>
+
 <img id="cardImage" class="card-img" alt="住人カード">
+
+<div id="meguriArea" class="section"></div>
 
 <div id="qrArea" class="qr-area">
 <div class="qr-title">🏠住人のお家はこちら</div>
@@ -202,6 +205,12 @@ document.getElementById("no").textContent = r[0] + "番";
 document.getElementById("name").textContent = r[2];
 document.getElementById("message").innerHTML =
 "が住んでいるようです🏠<br><br>少し覗いてみましょう🌳✨";
+
+const testMeguri = meguriMap["り"];
+document.getElementById("meguriArea").innerHTML =
+"🪽あなたの巡り屋は<br><br>【り】<br>" +
+testMeguri.title + "<br>" +
+testMeguri.subtitle;
 
 const img=document.getElementById("cardImage");
 img.src="./images/"+r[0]+".png";
