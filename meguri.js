@@ -55,3 +55,18 @@ const meguriMap = {
 const residentMeguriMap = {
   "44": "り"
 };
+const tsuhenToMeguriKana = {
+  "比肩": "い",
+  "劫財": "ろ",
+  "食神": "は",
+  "傷官": "に",
+  "正財": "ほ",
+  "偏財": "へ",
+  "正官": "と",
+  "偏官": "ち",
+  "印綬": "り",
+  "偏印": "ぬ"
+};
+function getMeguriKana(dayStem, tsuhen){
+  return tsuhenToMeguriKana[tsuhen] || "";
+}
