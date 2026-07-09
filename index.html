@@ -200,16 +200,8 @@ displayName ? "🌳" + displayName + "さんの森には…" : "🌳あなたの
 
 document.getElementById("no").textContent = r[0] + "番";
 document.getElementById("name").textContent = r[2];
-const testMeguri = meguriMap["り"];
-
 document.getElementById("message").innerHTML =
-"が住んでいるようです🏠<br><br>少し覗いてみましょう🌳✨" +
-"<br><br>━━━━━━━━━━<br><br>" +
-"🪽あなたの巡り屋は<br><br>" +
-"【り】<br>" +
-testMeguri.title + "<br>" +
-testMeguri.subtitle +
-"<br>です";
+"が住んでいるようです🏠<br><br>少し覗いてみましょう🌳✨";
 
 const img=document.getElementById("cardImage");
 img.src="./images/"+r[0]+".png";
