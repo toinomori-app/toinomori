@@ -208,11 +208,16 @@ document.getElementById("name").textContent = r[2];
 document.getElementById("message").innerHTML =
 "が住んでいるようです🏠<br><br>少し覗いてみましょう🌳✨";
 
-const testMeguri = meguriMap[residentMeguriMap[r[0]]];
-document.getElementById("meguriArea").innerHTML =
-"🪽あなたの巡り屋は<br><br>【り】<br>" +
-testMeguri.title + "<br>" +
-testMeguri.subtitle;
+const meguriKana = residentMeguriMap[r[0]];
+const testMeguri = meguriKana ? meguriMap[meguriKana] : null;
+if(testMeguri){
+  document.getElementById("meguriArea").innerHTML =
+  "🪽あなたの巡り屋は<br><br>【" + meguriKana + "】<br>" +
+  testMeguri.title + "<br>" +
+  testMeguri.subtitle;
+}else{
+  document.getElementById("meguriArea").innerHTML = "";
+}
 
 const img=document.getElementById("cardImage");
 img.src="./images/"+r[0]+".png";
